@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Variables semánticas para el MODO NOCHE -->
+    <!-- Fondo principal muy oscuro de la paleta -->
+    <color name="app_background">#0e0613</color>
+    <!-- Fondo para tarjetas, modales o sidebars -->
+    <color name="app_surface">#33122a</color>
+    <!-- El rojo como color de marca -->
+    <color name="primary_color">@color/gym_red</color>
+    <!-- El texto principal blanco o claro para contrastar con el fondo oscuro -->
+    <color name="text_primary">@color/white</color>
+    <!-- Texto secundario un poco más tenue -->
+    <color name="text_secondary">#CCCCCC</color>
+</resources>

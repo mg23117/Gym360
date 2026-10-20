@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Colores base de la paleta Gym360 -->
+    <color name="gym_yellow">#f0ee3d</color>
+    <color name="gym_red">#871522</color>
+    <color name="gym_pink">#82204b</color>
+    <color name="gym_plum">#33122a</color>
+    <color name="gym_dark">#0e0613</color>
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Variables semánticas para el MODO DÍA -->
+    <!-- Fondo principal de la app -->
+    <color name="app_background">#FFFFFF</color>
+    <!-- Fondo para tarjetas o modales -->
+    <color name="app_surface">#F3F3F3</color>
+    <!-- Color principal para botones primarios y encabezados -->
+    <color name="primary_color">@color/gym_red</color>
+    <!-- Color del texto principal -->
+    <color name="text_primary">@color/black</color>
+    <!-- Color del texto secundario o descriptivo -->
+    <color name="text_secondary">#666666</color>
 </resources>
