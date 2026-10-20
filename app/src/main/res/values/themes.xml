@@ -1,8 +1,15 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Tema base de la aplicacion -->
     <style name="Base.Theme.Gym360" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Color principal de la marca -->
+        <item name="colorPrimary">@color/primary_color</item>
+        <!-- Color del fondo general de la app -->
+        <item name="android:windowBackground">@color/app_background</item>
+        <!-- Color de las tarjetas o superficies elevadas -->
+        <item name="colorSurface">@color/app_surface</item>
+        <!-- Color de la barra de estado superior (hora, bateria, etc) -->
+        <item name="android:statusBarColor">@color/app_background</item>
+        <item name="android:windowLightStatusBar">true</item> <!-- Letras oscuras en la barra -->
     </style>
 
     <style name="Theme.Gym360" parent="Base.Theme.Gym360" />
