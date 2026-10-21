@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ========================================== -->
+    <!-- BOTONES -->
+    <!-- ========================================== -->
+
+    <!-- Botón Principal (Rosa para día y noche, ej: Iniciar Sesión, Adquirir Plan) -->
+    <style name="GymButton.Primary" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/gym_pink</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:paddingVertical">14dp</item>
+        <item name="android:fontFamily">@font/main_font</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- Botón Secundario (Gris/Transparente, ej: Cancelar en los modales) -->
+    <style name="GymButton.Secondary" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="strokeColor">#BDBDBD</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:fontFamily">@font/main_font</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Botón Flotante de Acción (FAB Amarillo con icono oscuro, ej: Agregar Producto) -->
+    <style name="GymFab.Yellow" parent="Widget.Material3.FloatingActionButton.Primary">
+        <item name="backgroundTint">@color/gym_yellow</item>
+        <item name="tint">@color/gym_dark</item> <!-- Color del icono (ej. el '+') -->
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance.Material3.Corner.Full</item>
+    </style>
+
+    <!-- ========================================== -->
+    <!-- CAMPOS DE TEXTO (Inputs y Buscadores) -->
+    <!-- ========================================== -->
+
+    <!-- Contenedor general para Inputs (Login, Registro, Formularios) -->
+    <style name="GymTextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">12dp</item>
+        <item name="boxCornerRadiusTopEnd">12dp</item>
+        <item name="boxCornerRadiusBottomStart">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">12dp</item>
+        <item name="boxStrokeColor">@color/gym_pink</item>
+        <item name="hintTextColor">@color/text_secondary</item>
+    </style>
+
+    <!-- Texto interior del Input -->
+    <style name="GymTextInputEditText">
+        <item name="android:fontFamily">@font/main_font</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:padding">14dp</item>
+    </style>
+
+    <!-- Barra de Búsqueda (Search Bar) -->
+    <style name="GymSearchBar" parent="GymTextInputLayout">
+        <item name="boxCornerRadiusTopStart">24dp</item>
+        <item name="boxCornerRadiusTopEnd">24dp</item>
+        <item name="boxCornerRadiusBottomStart">24dp</item>
+        <item name="boxCornerRadiusBottomEnd">24dp</item>
+        <item name="startIconDrawable">@android:drawable/ic_menu_search</item>
+        <item name="startIconTint">@color/text_secondary</item>
+    </style>
+
+    <!-- ========================================== -->
+    <!-- TARJETAS (Cards para Inicio, Membresías, etc.) -->
+    <!-- ========================================== -->
+
+    <!-- Tarjeta estándar -->
+    <style name="GymCard" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardBackgroundColor">@color/app_surface</item>
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">2dp</item>
+        <!-- Margen interno general -->
+        <item name="contentPadding">16dp</item>
+    </style>
+
+    <!-- Tarjeta destacada (Ej: Saldo disponible, color sólido oscuro) -->
+    <style name="GymCard.Highlighted" parent="GymCard">
+        <item name="cardBackgroundColor">@color/gym_plum</item>
+    </style>
+
+    <!-- ========================================== -->
+    <!-- DIÁLOGOS Y MODALES -->
+    <!-- ========================================== -->
+
+    <!-- Estilo para el contenedor del Modal (CRUD, Confirmación de Pago) -->
+    <style name="GymModalContainer" parent="GymCard">
+        <item name="cardCornerRadius">20dp</item>
+        <item name="contentPadding">0dp</item> <!-- 0dp para que el header pegue al borde -->
+    </style>
+
+    <!-- Header del Modal (La franja rosa arriba con el título y la X) -->
+    <style name="GymModalHeader">
+        <item name="android:background">@color/gym_pink</item>
+        <item name="android:padding">16dp</item>
+    </style>
+
+    <!-- Título dentro del Header del Modal -->
+    <style name="GymModalTitle">
+        <item name="android:fontFamily">@font/main_font</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+</resources>
