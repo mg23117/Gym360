@@ -7,13 +7,14 @@
 
     <!-- Botón Principal (Rosa para día y noche, ej: Iniciar Sesión, Adquirir Plan) -->
     <style name="GymButton.Primary" parent="Widget.Material3.Button">
-        <item name="backgroundTint">@color/gym_pink</item>
+        <item name="android:background">@drawable/bg_button_gradient_border</item>
+        <item name="backgroundTint">@null</item> <!-- Obligatorio para que se vea el drawable -->
         <item name="android:textColor">@color/white</item>
         <item name="cornerRadius">12dp</item>
         <item name="android:paddingVertical">14dp</item>
         <item name="android:fontFamily">@font/main_font</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">17sp</item>
     </style>
 
     <!-- Botón Secundario (Gris/Transparente, ej: Cancelar en los modales) -->
