@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/windowBackground"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Logo de Gym360 -->
+        <com.google.android.material.card.MaterialCardView
+            style="@style/GymCard"
+            android:layout_width="160dp"
+            android:layout_height="151dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="20dp"
+            app:contentPadding="0dp"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardElevation="0dp">
+
+            <ImageView
+                android:id="@+id/ivLogoRegister"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/ic_gym360_logo" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Título -->
+        <TextView
+            android:id="@+id/tvRegisterTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:fontFamily="@font/main_font"
+            android:text="Registrarse"
+            android:textColor="@color/text_primary"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <!-- Campo de Nombre -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilFirstName"
+            style="@style/GymTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre"
+            app:startIconDrawable="@drawable/ic_person"
+            app:errorEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etFirstName"
+                style="@style/GymTextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="55dp"
+                android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Campo de Apellido -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilLastName"
+            style="@style/GymTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Apellido"
+            app:startIconDrawable="@drawable/ic_person"
+            app:errorEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etLastName"
+                style="@style/GymTextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="55dp"
+                android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Campo de Correo Electrónico -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilEmailRegister"
+            style="@style/GymTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Correo Electrónico"
+            app:startIconDrawable="@android:drawable/ic_dialog_email"
+            app:errorEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEmailRegister"
+                style="@style/GymTextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="55dp"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Campo de Contraseña -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilPasswordRegister"
+            style="@style/GymTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Contraseña"
+            app:startIconDrawable="@drawable/ic_lock_large"
+            app:endIconMode="password_toggle"
+            app:errorEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPasswordRegister"
+                style="@style/GymTextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="55dp"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Campo de Confirmar Contraseña -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilConfirmPassword"
+            style="@style/GymTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:hint="Confirmar Contraseña"
+            app:startIconDrawable="@drawable/ic_lock_large"
+            app:endIconMode="password_toggle"
+            app:errorEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etConfirmPassword"
+                style="@style/GymTextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="55dp"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Botón de Registrarse -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnRegister"
+            style="@style/GymButton.Primary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Registrarse" />
+
+        <!-- Enlace a Login -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¿Ya tienes una cuenta? "
+                android:textColor="@color/text_primary" />
+
+            <TextView
+                android:id="@+id/tvGoToLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Iniciar Sesión"
+                android:textColor="@color/gym_pink"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
