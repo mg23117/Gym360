@@ -41,7 +41,7 @@
             android:layout_marginBottom="24dp"
             android:fontFamily="@font/main_font"
             android:text="Iniciar Sesión"
-            android:textColor="@color/gym_dark"
+            android:textColor="@color/text_primary"
             android:textSize="24sp"
             android:textStyle="bold" />
 
