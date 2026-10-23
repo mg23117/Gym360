@@ -28,16 +28,25 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        // 2. Lógica del Splash: Esperar 2.5 segundos y pasar al Login
+        // Lógica del Splash: Esperar 2.5 segundos y decidir a dónde ir
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                // Navegar a la pantalla de Login
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                // Leer SharedPreferences para ver si guardó sesión
+                android.content.SharedPreferences prefs = getSharedPreferences("Gym360Prefs", MODE_PRIVATE);
+                boolean isRemembered = prefs.getBoolean("is_remembered", false);
+
+                Intent intent;
+                if (isRemembered) {
+                    // Si ya tiene sesión, mandarlo directo al Home
+                    intent = new Intent(MainActivity.this, HomeActivity.class);
+                } else {
+                    // Si no, mandarlo al Login
+                    intent = new Intent(MainActivity.this, LoginActivity.class);
+                }
                 startActivity(intent);
 
-                // Finalizar el Splash Screen para que el usuario no pueda volver a él con el botón "atrás"
-                finish();
+                finish(); // Destruye el Splash para no poder volver con el botón atrás
             }
         }, 2500);
     }
