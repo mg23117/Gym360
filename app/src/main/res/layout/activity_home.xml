@@ -170,7 +170,7 @@
                 style="@style/GymCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp">
+                android:layout_marginBottom="16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -191,8 +191,8 @@
                         android:id="@+id/mapFragment"
                         android:name="com.google.android.gms.maps.SupportMapFragment"
                         android:layout_width="match_parent"
-                        android:layout_height="120dp"
-                        android:layout_marginBottom="12dp"/>
+                        android:layout_height="165dp"
+                        android:layout_marginBottom="8dp"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -209,19 +209,20 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Av. Principal 123"
+                                android:text="14 Avenida Sur"
                                 android:textColor="@color/text_primary"
                                 android:textStyle="bold"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Ubicación del local"
+                                android:text="Frente a Ferretería Sumersa"
                                 android:textColor="@color/text_secondary"
                                 android:textSize="12sp"/>
                         </LinearLayout>
 
                         <TextView
+                            android:id="@+id/tvDirections"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Cómo llegar"
