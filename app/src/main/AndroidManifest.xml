@@ -17,6 +17,12 @@
         android:roundIcon="@mipmap/ic_gym360_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.Gym360">
+
+        <!-- API KEY de Google Maps -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AQUI_VA_LA_API_KEY" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">

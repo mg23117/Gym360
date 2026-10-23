@@ -20,5 +20,11 @@
     <!-- Color del texto principal -->
     <color name="text_primary">@color/black</color>
     <!-- Color del texto secundario o descriptivo -->
-    <color name="text_secondary">#666666</color>
+    <color name="text_secondary">#1F1919</color>
+
+    <!-- Color para textos e iconos destacados de las cards -->
+    <color name="card_accent">#33122a</color>
+
+    <!-- Color para el divisor de toolbar -->
+    <color name="toolbar_divider">#B3B0B0</color>
 </resources>

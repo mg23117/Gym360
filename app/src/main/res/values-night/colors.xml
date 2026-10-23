@@ -11,4 +11,10 @@
     <color name="text_primary">@color/white</color>
     <!-- Texto secundario un poco más tenue -->
     <color name="text_secondary">#CCCCCC</color>
+
+    <!-- Color para textos e iconos destacados de las cards -->
+    <color name="card_accent">#f0ee3d</color>
+
+    <!-- Color para el divisor de toolbar (sin color para el modo noche) -->
+    <color name="toolbar_divider"></color>
 </resources>
