@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_dashboard"
+            android:icon="@drawable/ic_admin_dashboard"
+            android:title="Panel administrativo" />
+
+        <item
+            android:id="@+id/nav_clients"
+            android:icon="@drawable/ic_admin_clients"
+            android:title="Gestión de Clientes" />
+
+        <item
+            android:id="@+id/nav_memberships"
+            android:icon="@drawable/ic_admin_memberships"
+            android:title="Gestión de Membresías" />
+
+        <item
+            android:id="@+id/nav_attendance"
+            android:icon="@drawable/ic_admin_attendance"
+            android:title="Gestión de Asistencias" />
+
+        <item
+            android:id="@+id/nav_exercises"
+            android:icon="@drawable/ic_admin_exercises"
+            android:title="Gestión de Ejercicios" />
+
+        <item
+            android:id="@+id/nav_inventory"
+            android:icon="@drawable/ic_admin_inventory"
+            android:title="Inventario" />
+
+        <item
+            android:id="@+id/nav_sales"
+            android:icon="@drawable/ic_admin_orders"
+            android:title="Ventas y pedidos" />
+
+    </group>
+
+</menu>
