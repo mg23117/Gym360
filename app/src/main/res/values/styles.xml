@@ -72,9 +72,16 @@
     <style name="GymCard" parent="Widget.Material3.CardView.Elevated">
         <item name="cardBackgroundColor">@color/app_surface</item>
         <item name="cardCornerRadius">16dp</item>
-        <item name="cardElevation">2dp</item>
+
         <!-- Margen interno general -->
         <item name="contentPadding">16dp</item>
+
+        <!-- Sombra exterior para efecto flotante -->
+        <item name="cardUseCompatPadding">true</item>
+        <item name="cardElevation">2dp</item>
+
+        <!-- Evitar bordes adicionales -->
+        <item name="strokeWidth">0dp</item>
     </style>
 
     <!-- Tarjeta destacada (Ej: Saldo disponible, color sólido oscuro) -->

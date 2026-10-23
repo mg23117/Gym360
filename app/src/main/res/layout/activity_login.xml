@@ -19,7 +19,7 @@
             style="@style/GymCard"
             android:layout_width="160dp"
             android:layout_height="151dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             app:contentPadding="0dp"
             app:cardBackgroundColor="@android:color/transparent"
@@ -91,7 +91,7 @@
             style="@style/GymTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="0dp"
             android:hint="Contraseña"
             app:startIconDrawable="@drawable/ic_lock_large"
             app:endIconMode="password_toggle"
@@ -105,6 +105,16 @@
                 android:paddingStart="55dp"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Checkbox para recordar credenciales -->
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/cbRememberMe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="18dp"
+            android:text="Guardar credenciales"
+            android:textColor="@color/text_primary"
+            app:buttonTint="@color/gym_pink" />
 
         <!-- Botón de Iniciar Sesión -->
         <com.google.android.material.button.MaterialButton
