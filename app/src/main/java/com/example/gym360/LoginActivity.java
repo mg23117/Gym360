@@ -11,6 +11,11 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import com.example.gym360.core.auth.AdminRoleChecker;
+import com.example.gym360.data.sync.MembershipSyncScheduler;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -20,6 +25,8 @@ public class LoginActivity extends AppCompatActivity {
     private MaterialButton btnLogin;
     private TextView tvGoToRegister;
     private SharedPreferences sharedPreferences;
+
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,25 +42,130 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         tvGoToRegister = findViewById(R.id.tvGoToRegister);
 
+        firebaseAuth = FirebaseAuth.getInstance();
+
         // Inicializar SharedPreferences
         sharedPreferences = getSharedPreferences("Gym360Prefs", MODE_PRIVATE);
         loadSavedCredentials();
 
         // Botón de Iniciar Sesión
-        btnLogin.setOnClickListener(v -> {
-            if (validateInputs()) {
-                if (cbRememberMe.isChecked()) {
-                    saveCredentials(etEmail.getText().toString().trim(), etPassword.getText().toString().trim());
-                } else {
-                    clearCredentials();
-                }
 
-                // Aquí irá luego la validación con Firebase/Room.
-                // Por ahora pasamos directo al Home.
-                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                startActivity(intent);
-                finish();
+        btnLogin.setOnClickListener(v -> {
+
+            if (!validateInputs()) {
+                return;
             }
+
+            String email = etEmail.getText()
+                    .toString().trim();
+
+            String password = etPassword.getText()
+                    .toString();
+
+            btnLogin.setEnabled(false);
+
+            firebaseAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, task -> {
+
+                        if (!task.isSuccessful()) {
+
+                            btnLogin.setEnabled(true);
+
+                            Toast.makeText(
+                                    this,
+                                    "Correo o contraseña incorrectos",
+                                    Toast.LENGTH_LONG
+                            ).show();
+
+                            return;
+                        }
+
+                        FirebaseUser user = firebaseAuth.getCurrentUser();
+
+                        if (user == null) {
+
+                            btnLogin.setEnabled(true);
+
+                            Toast.makeText(
+                                    this,
+                                    "No se pudo obtener la sesión",
+                                    Toast.LENGTH_LONG
+                            ).show();
+
+                            return;
+                        }
+
+                        // Guardar únicamente el correo para autocompletar.
+                        if (cbRememberMe.isChecked()) {
+                            sharedPreferences.edit()
+                                    .putString("saved_email", email)
+                                    .putBoolean("remember_email", true)
+                                    .apply();
+                        } else {
+                            sharedPreferences.edit()
+                                    .remove("saved_email")
+                                    .putBoolean("remember_email", false)
+                                    .apply();
+                        }
+
+                        // Nunca conservar la contraseña del login antiguo.
+                        sharedPreferences.edit()
+                                .remove("saved_password")
+                                .remove("user_role")
+                                .remove("is_remembered")
+                                .apply();
+
+                        // Verificar privilegios desde Firestore.
+                        AdminRoleChecker.check(
+                                user,
+                                new AdminRoleChecker.Callback() {
+
+                                    @Override
+                                    public void onSuccess(boolean isAdmin) {
+
+                                        btnLogin.setEnabled(true);
+
+                                        Intent intent;
+
+                                        if (isAdmin) {
+
+                                            // Reanudar sincronizaciones pendientes.
+                                            MembershipSyncScheduler.enqueue(
+                                                    getApplicationContext()
+                                            );
+
+                                            intent = new Intent(
+                                                    LoginActivity.this,
+                                                    AdminDashboardActivity.class
+                                            );
+
+                                        } else {
+
+                                            intent = new Intent(
+                                                    LoginActivity.this,
+                                                    HomeActivity.class
+                                            );
+                                        }
+
+                                        startActivity(intent);
+                                        finish();
+                                    }
+
+                                    @Override
+                                    public void onError(Exception exception) {
+
+                                        btnLogin.setEnabled(true);
+
+                                        Toast.makeText(
+                                                LoginActivity.this,
+                                                "No se pudieron verificar los permisos. " +
+                                                        "Comprueba tu conexión.",
+                                                Toast.LENGTH_LONG
+                                        ).show();
+                                    }
+                                }
+                        );
+                    });
         });
 
         // Enlace a Registro
@@ -103,10 +215,25 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loadSavedCredentials() {
-        boolean isRemembered = sharedPreferences.getBoolean("is_remembered", false);
-        if (isRemembered) {
-            etEmail.setText(sharedPreferences.getString("saved_email", ""));
-            etPassword.setText(sharedPreferences.getString("saved_password", ""));
+
+        boolean rememberEmail = sharedPreferences.getBoolean(
+                "remember_email",
+                false
+        );
+
+        // Si no hay credenciales guardadas, no hacer nada
+        sharedPreferences.edit()
+                .remove("saved_password")
+                .remove("user_role")
+                .remove("is_remembered")
+                .apply();
+
+        if (rememberEmail) {
+
+            etEmail.setText(
+                    sharedPreferences.getString("saved_email", "")
+            );
+
             cbRememberMe.setChecked(true);
         }
     }

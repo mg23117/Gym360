@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "835952498086",
+    "project_id": "gym360-ca8ac",
+    "storage_bucket": "gym360-ca8ac.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:835952498086:android:71994bf79cbd973ac32b67",
+        "android_client_info": {
+          "package_name": "com.example.gym360"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpfrWlwpnBydPbRCNbHpxanawci67q_2I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
