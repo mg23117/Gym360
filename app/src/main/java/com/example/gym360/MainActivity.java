@@ -4,12 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import com.example.gym360.core.auth.AdminRoleChecker;
+import com.example.gym360.data.sync.MembershipSyncScheduler;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,25 +36,67 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Lógica del Splash: Esperar 2.5 segundos y decidir a dónde ir
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // Leer SharedPreferences para ver si guardó sesión
-                android.content.SharedPreferences prefs = getSharedPreferences("Gym360Prefs", MODE_PRIVATE);
-                boolean isRemembered = prefs.getBoolean("is_remembered", false);
 
-                Intent intent;
-                if (isRemembered) {
-                    // Si ya tiene sesión, mandarlo directo al Home
-                    intent = new Intent(MainActivity.this, HomeActivity.class);
-                } else {
-                    // Si no, mandarlo al Login
-                    intent = new Intent(MainActivity.this, LoginActivity.class);
-                }
-                startActivity(intent);
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
 
-                finish(); // Destruye el Splash para no poder volver con el botón atrás
+            FirebaseUser user = FirebaseAuth.getInstance()
+                    .getCurrentUser();
+
+            // No existe sesión Firebase.
+            if (user == null) {
+
+                openActivity(LoginActivity.class);
+                return;
             }
+
+            // Existe una sesión. Consultamos el rol real.
+            AdminRoleChecker.check(
+                    user,
+                    new AdminRoleChecker.Callback() {
+
+                        @Override
+                        public void onSuccess(boolean isAdmin) {
+
+                            if (isAdmin) {
+
+                                MembershipSyncScheduler.enqueue(
+                                        getApplicationContext()
+                                );
+
+                                openActivity(AdminDashboardActivity.class);
+
+                            } else {
+
+                                openActivity(HomeActivity.class);
+                            }
+                        }
+
+                        @Override
+                        public void onError(Exception exception) {
+
+                            // No conceder acceso administrativo
+                            // sin verificar permisos.
+                            Toast.makeText(
+                                    MainActivity.this,
+                                    "No se pudo verificar la sesión. " +
+                                            "Comprueba tu conexión.",
+                                    Toast.LENGTH_LONG
+                            ).show();
+
+                            openActivity(LoginActivity.class);
+                        }
+                    }
+            );
+
         }, 2500);
+
+    }
+
+    private void openActivity(Class<?> destination) {
+
+        Intent intent = new Intent(this, destination);
+
+        startActivity(intent);
+        finish();
     }
 }

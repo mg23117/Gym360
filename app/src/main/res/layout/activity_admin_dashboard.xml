@@ -39,6 +39,7 @@
 
         <!-- Contenido Desplazable -->
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/dashboardContent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -203,6 +204,15 @@
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
+
+        <!-- Contenedor para pantallas administrativas -->
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/adminFragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:background="@color/app_background"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

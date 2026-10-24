@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.gym360" />
+                  <option name="mobileSdkAppId" value="1:835952498086:android:71994bf79cbd973ac32b67" />
+                  <option name="projectId" value="gym360-ca8ac" />
+                  <option name="projectNumber" value="835952498086" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

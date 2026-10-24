@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
+    id("androidx.room") version "2.8.5"
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -35,6 +37,10 @@ android {
     }
 }
 
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
 dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
@@ -58,11 +64,17 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:2.8.5")
 
     // Firebase
-    implementation(platform("com.google.firebase:firebase-bom:34.19.0"))
+    implementation(platform("com.google.firebase:firebase-bom:35.1.0"))
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-storage")
+    implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-storage")
 
     // Material3
     implementation("com.google.android.material:material:1.11.0")
+
+    implementation("androidx.recyclerview:recyclerview:1.4.0")
+
+    implementation("androidx.work:work-runtime:2.12.0")
 }
