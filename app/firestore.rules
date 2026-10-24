@@ -2,45 +2,46 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    // Comprueba que el usuario esté autenticado
-    // y registrado como administrador.
     function isAdmin() {
       return request.auth != null
-        && exists(
-          /databases/$(database)/documents/admin_users/$(request.auth.uid)
-        );
+        && exists(/databases/$(database)/documents/admin_users/$(request.auth.uid));
     }
 
-    // Registros de administradores.
     match /admin_users/{uid} {
-      // Cada usuario autenticado puede consultar
-      // únicamente su propio documento.
-      allow get: if request.auth != null
-                 && request.auth.uid == uid;
-
-      // La aplicación no puede modificar estos registros.
-      allow create, update, delete, list: if false;
+      allow get: if request.auth != null && request.auth.uid == uid;
+      allow list, create, update, delete: if false;
     }
 
-    // Catálogo de membresías.
-    match /memberships/{membershipId} {
-      allow read: if isAdmin();
-
-      allow create, update: if isAdmin()
+    // Perfiles de usuarios: cada cliente puede crear y leer solo su perfil.
+    match /users/{uid} {
+      allow get: if request.auth != null && request.auth.uid == uid;
+      allow list, update, delete: if false;
+      allow create: if request.auth != null
+        && request.auth.uid == uid
         && request.resource.data.keys().hasAll([
-          'id',
-          'name',
-          'durationMonths',
-          'price',
-          'benefits'
+          'uid', 'fullName', 'email', 'createdAt'
         ])
         && request.resource.data.keys().hasOnly([
-          'id',
-          'name',
-          'durationMonths',
-          'price',
-          'benefits'
+          'uid', 'fullName', 'email', 'createdAt'
+        ])
+        && request.resource.data.uid == uid
+        && request.resource.data.uid is string
+        && request.resource.data.fullName is string
+        && request.resource.data.fullName.size() >= 7
+        && request.resource.data.fullName.size() <= 120
+        && request.resource.data.email is string
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.createdAt == request.time;
+    }
+
+    match /memberships/{membershipId} {
+      allow read: if isAdmin();
+      allow create, update: if isAdmin()
+        && request.resource.data.keys().hasAll([
+          'id', 'name', 'durationMonths', 'price', 'benefits'
+        ])
+        && request.resource.data.keys().hasOnly([
+          'id', 'name', 'durationMonths', 'price', 'benefits'
         ])
         && request.resource.data.id == membershipId
         && request.resource.data.name is string
@@ -51,7 +52,6 @@ service cloud.firestore {
         && request.resource.data.price is number
         && request.resource.data.price >= 0
         && request.resource.data.benefits is list;
-
       allow delete: if isAdmin();
     }
   }

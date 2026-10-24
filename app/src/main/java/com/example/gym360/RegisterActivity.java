@@ -1,10 +1,14 @@
 package com.example.gym360;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.gym360.data.repository.UserRepositoryImpl;
+import com.example.gym360.domain.repository.UserRepository;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -15,6 +19,8 @@ public class RegisterActivity extends AppCompatActivity {
     private TextInputLayout tilFullName, tilEmail, tilPassword, tilConfirmPassword;
     private MaterialButton btnRegister;
     private TextView tvGoToLogin;
+
+    private UserRepository userRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +41,38 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister = findViewById(R.id.btnRegister);
         tvGoToLogin = findViewById(R.id.tvGoToLogin);
 
-        // Botón de Registro
+        userRepository = new UserRepositoryImpl(getApplicationContext());
+
         btnRegister.setOnClickListener(v -> {
-            if (validateInputs()) {
-                // Aquí irá luego la inserción en Firestore y Room
-                Toast.makeText(this, "Validación correcta. Listo para guardar.", Toast.LENGTH_SHORT).show();
-            }
+            if (!validateInputs()) return;
+            btnRegister.setEnabled(false);
+            String name = etFullName.getText().toString().trim();
+            String email = etEmail.getText().toString().trim();
+            String password = etPassword.getText().toString();
+
+            userRepository.register(name, email, password, new UserRepository.RegisterCallback() {
+                @Override
+                public void onSuccess() {
+                    btnRegister.setEnabled(true);
+                    // Retirar cualquier credencial/rol simulado heredado.
+                    getSharedPreferences("Gym360Prefs", MODE_PRIVATE).edit()
+                            .remove("saved_password")
+                            .remove("user_role")
+                            .remove("is_remembered")
+                            .apply();
+                    Toast.makeText(RegisterActivity.this,
+                            "Cuenta creada correctamente", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void onError(String message) {
+                    btnRegister.setEnabled(true);
+                    Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_LONG).show();
+                }
+            });
         });
 
         // Enlace a Login

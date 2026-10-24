@@ -1,8 +1,10 @@
 package com.example.gym360;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
@@ -16,6 +18,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import android.util.Log;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class AdminDashboardActivity extends AppCompatActivity {
 
@@ -84,22 +87,18 @@ public class AdminDashboardActivity extends AppCompatActivity {
     }
 
     private void setupNavigation() {
-
         navigationView.setNavigationItemSelectedListener(item -> {
-
             int itemId = item.getItemId();
 
             if (itemId == R.id.nav_dashboard) {
-
                 showDashboard();
-
             } else if (itemId == R.id.nav_memberships) {
-
                 showMemberships();
-
+            } else if (itemId == R.id.nav_logout) {
+                drawerLayout.closeDrawer(navigationView);
+                showLogoutConfirmation();
+                return true;
             } else {
-
-                // Otras secciones aún no implementadas.
                 return false;
             }
 
@@ -184,4 +183,38 @@ public class AdminDashboardActivity extends AppCompatActivity {
                         : "Panel Administrativo"
         );
     }
+
+    private void showLogoutConfirmation() {
+        new AlertDialog.Builder(this)
+                .setTitle("Cerrar sesión")
+                .setMessage(
+                        "¿Estás seguro de que deseas cerrar sesión?"
+                )
+                .setNegativeButton("Cancelar", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .setPositiveButton("Cerrar sesión", (dialog, which) -> {
+                    logout();
+                })
+                .show();
+    }
+
+
+    private void logout() {
+        // Finalizar la sesión de Firebase Authentication.
+        FirebaseAuth.getInstance().signOut();
+        // Regresar a LoginActivity.
+        Intent intent = new Intent(
+                AdminDashboardActivity.this,
+                LoginActivity.class
+        );
+        // Eliminar las Activities anteriores del historial.
+        intent.setFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK |
+                        Intent.FLAG_ACTIVITY_CLEAR_TASK
+        );
+        startActivity(intent);
+        finish();
+    }
+
 }
