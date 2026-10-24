@@ -39,26 +39,16 @@ public class AdminDashboardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_admin_dashboard);
 
         // Verificación temporal de Firebase
         if (FirebaseApp.getApps(this).isEmpty()) {
-
-            Log.e(
-                    "Gym360Firebase",
-                    "Firebase no está inicializado. Revisar Gradle y google-services.json"
-            );
+            Log.e("Gym360Firebase", "Firebase no está inicializado. Revisar Gradle y google-services.json");
 
         } else {
-
             FirebaseApp app = FirebaseApp.getInstance();
 
-            Log.d(
-                    "Gym360Firebase",
-                    "Firebase inicializado correctamente. Proyecto: "
-                            + app.getOptions().getProjectId()
-            );
+            Log.d("Gym360Firebase", "Firebase inicializado correctamente. Proyecto: " + app.getOptions().getProjectId());
         }
 
         initializeViews();
@@ -108,9 +98,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
     }
 
     private void setupFragmentNavigation() {
-
-        getSupportFragmentManager()
-                .addOnBackStackChangedListener(
+        getSupportFragmentManager().addOnBackStackChangedListener(
                         this::updateContentVisibility
                 );
 
@@ -119,12 +107,9 @@ public class AdminDashboardActivity extends AppCompatActivity {
     }
 
     private void showMemberships() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
-        FragmentManager fragmentManager =
-                getSupportFragmentManager();
-
-        Fragment currentFragment =
-                fragmentManager.findFragmentById(
+        Fragment currentFragment = fragmentManager.findFragmentById(
                         R.id.adminFragmentContainer
                 );
 
@@ -148,54 +133,30 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
         FragmentManager fragmentManager =
                 getSupportFragmentManager();
-
         if (fragmentManager.getBackStackEntryCount() > 0) {
-
             fragmentManager.popBackStack(
                     MEMBERSHIP_BACKSTACK,
                     FragmentManager.POP_BACK_STACK_INCLUSIVE
             );
-
         } else {
-
             updateContentVisibility();
         }
     }
 
     private void updateContentVisibility() {
-
-        Fragment fragment = getSupportFragmentManager()
-                .findFragmentById(R.id.adminFragmentContainer);
-
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.adminFragmentContainer);
         boolean showingFragment = fragment != null;
-
-        dashboardContent.setVisibility(
-                showingFragment ? View.GONE : View.VISIBLE
-        );
-
-        fragmentContainer.setVisibility(
-                showingFragment ? View.VISIBLE : View.GONE
-        );
-
-        toolbar.setTitle(
-                showingFragment
-                        ? "Membresías"
-                        : "Panel Administrativo"
-        );
+        dashboardContent.setVisibility(showingFragment ? View.GONE : View.VISIBLE);
+        fragmentContainer.setVisibility(showingFragment ? View.VISIBLE : View.GONE);
+        toolbar.setTitle(showingFragment ? "Membresías" : "Panel Administrativo");
     }
 
     private void showLogoutConfirmation() {
         new AlertDialog.Builder(this)
                 .setTitle("Cerrar sesión")
-                .setMessage(
-                        "¿Estás seguro de que deseas cerrar sesión?"
-                )
-                .setNegativeButton("Cancelar", (dialog, which) -> {
-                    dialog.dismiss();
-                })
-                .setPositiveButton("Cerrar sesión", (dialog, which) -> {
-                    logout();
-                })
+                .setMessage("¿Estás seguro de que deseas cerrar sesión?")
+                .setNegativeButton("Cancelar", (dialog, which) -> {dialog.dismiss();})
+                .setPositiveButton("Cerrar sesión", (dialog, which) -> {logout();})
                 .show();
     }
 
