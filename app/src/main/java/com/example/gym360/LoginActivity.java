@@ -1,5 +1,6 @@
 package com.example.gym360;
 
+import android.util.Log;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import com.example.gym360.core.auth.AdminRoleChecker;
 import com.example.gym360.data.sync.MembershipSyncScheduler;
+import com.example.gym360.core.security.PasswordEncryptionManager;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -56,111 +58,59 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
-            String email = etEmail.getText()
-                    .toString().trim();
-
-            String password = etPassword.getText()
-                    .toString();
+            String email = etEmail.getText().toString().trim();
+            String password = etPassword.getText().toString();
 
             btnLogin.setEnabled(false);
-
-            firebaseAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, task -> {
-
+            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
                         if (!task.isSuccessful()) {
-
                             btnLogin.setEnabled(true);
 
-                            Toast.makeText(
-                                    this,
-                                    "Correo o contraseña incorrectos",
-                                    Toast.LENGTH_LONG
-                            ).show();
-
+                            Toast.makeText(this, "Correo o contraseña incorrectos", Toast.LENGTH_LONG).show();
                             return;
                         }
 
                         FirebaseUser user = firebaseAuth.getCurrentUser();
-
                         if (user == null) {
-
                             btnLogin.setEnabled(true);
 
-                            Toast.makeText(
-                                    this,
-                                    "No se pudo obtener la sesión",
-                                    Toast.LENGTH_LONG
-                            ).show();
-
+                            Toast.makeText(this, "No se pudo obtener la sesión", Toast.LENGTH_LONG).show();
                             return;
                         }
 
-                        // Guardar únicamente el correo para autocompletar.
                         if (cbRememberMe.isChecked()) {
-                            sharedPreferences.edit()
-                                    .putString("saved_email", email)
-                                    .putBoolean("remember_email", true)
-                                    .apply();
+                            saveCredentials(email, password);
                         } else {
-                            sharedPreferences.edit()
-                                    .remove("saved_email")
-                                    .putBoolean("remember_email", false)
-                                    .apply();
+                            clearCredentials();
                         }
 
-                        // Nunca conservar la contraseña del login antiguo.
-                        sharedPreferences.edit()
-                                .remove("saved_password")
-                                .remove("user_role")
-                                .remove("is_remembered")
-                                .apply();
-
                         // Verificar privilegios desde Firestore.
-                        AdminRoleChecker.check(
-                                user,
-                                new AdminRoleChecker.Callback() {
-
+                        AdminRoleChecker.check(user, new AdminRoleChecker.Callback() {
                                     @Override
                                     public void onSuccess(boolean isAdmin) {
-
                                         btnLogin.setEnabled(true);
-
                                         Intent intent;
 
                                         if (isAdmin) {
-
                                             // Reanudar sincronizaciones pendientes.
                                             MembershipSyncScheduler.enqueue(
                                                     getApplicationContext()
                                             );
-
-                                            intent = new Intent(
-                                                    LoginActivity.this,
-                                                    AdminDashboardActivity.class
-                                            );
+                                            intent = new Intent(LoginActivity.this, AdminDashboardActivity.class);
 
                                         } else {
-
-                                            intent = new Intent(
-                                                    LoginActivity.this,
-                                                    HomeActivity.class
-                                            );
+                                            intent = new Intent(LoginActivity.this, HomeActivity.class);
                                         }
-
                                         startActivity(intent);
                                         finish();
                                     }
 
                                     @Override
                                     public void onError(Exception exception) {
-
                                         btnLogin.setEnabled(true);
 
-                                        Toast.makeText(
-                                                LoginActivity.this,
-                                                "No se pudieron verificar los permisos. " +
-                                                        "Comprueba tu conexión.",
-                                                Toast.LENGTH_LONG
+                                        Toast.makeText(LoginActivity.this, "No se pudieron verificar los permisos. " +
+                                                "Comprueba tu conexión.", Toast.LENGTH_LONG
                                         ).show();
                                     }
                                 }
@@ -196,45 +146,83 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             tilPassword.setError(null);
         }
-
         return isValid;
     }
 
+
     private void saveCredentials(String email, String password) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("saved_email", email);
-        editor.putString("saved_password", password);
-        editor.putBoolean("is_remembered", true);
-        editor.apply();
+        try {
+            String encryptedPassword =
+                    PasswordEncryptionManager.encrypt(password);
+
+            sharedPreferences.edit()
+                    .putString("saved_email", email)
+                    .putString(
+                            "saved_password_encrypted",
+                            encryptedPassword
+                    )
+                    .putBoolean("remember_email", true)
+                    .remove("saved_password")
+                    .remove("is_remembered")
+                    .remove("user_role")
+                    .commit();
+
+        } catch (Exception exception) {
+            Log.e("Gym360Security", "No se pudieron guardar las credenciales cifradas", exception);
+
+            clearCredentials();
+
+            Toast.makeText(
+                    this,
+                    "Sesión iniciada, pero no fue posible recordar la contraseña",
+                    Toast.LENGTH_LONG
+            ).show();
+        }
     }
+
 
     private void clearCredentials() {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
+        sharedPreferences.edit()
+                .remove("saved_email")
+                .remove("saved_password")
+                .remove("saved_password_encrypted")
+                .remove("remember_email")
+                .remove("is_remembered")
+                .remove("user_role")
+                .apply();
     }
 
+
     private void loadSavedCredentials() {
+        boolean rememberEmail = sharedPreferences.getBoolean("remember_email", false);
 
-        boolean rememberEmail = sharedPreferences.getBoolean(
-                "remember_email",
-                false
-        );
+        if (!rememberEmail) {
+            clearCredentials();
+            return;
+        }
 
-        // Si no hay credenciales guardadas, no hacer nada
-        sharedPreferences.edit()
-                .remove("saved_password")
-                .remove("user_role")
-                .remove("is_remembered")
-                .apply();
+        String savedEmail = sharedPreferences.getString("saved_email", "");
+        String encryptedPassword = sharedPreferences.getString("saved_password_encrypted", null);
 
-        if (rememberEmail) {
+        if (encryptedPassword == null) {
+            clearCredentials();
+            return;
+        }
 
-            etEmail.setText(
-                    sharedPreferences.getString("saved_email", "")
-            );
+        try {
+            String password = PasswordEncryptionManager.decrypt(encryptedPassword);
 
+            etEmail.setText(savedEmail);
+            etPassword.setText(password);
             cbRememberMe.setChecked(true);
+
+        } catch (Exception exception) {
+            Log.e("Gym360Security", "No se pudieron recuperar las credenciales", exception);
+
+            clearCredentials();
+            etEmail.setText("");
+            etPassword.setText("");
+            cbRememberMe.setChecked(false);
         }
     }
 }
