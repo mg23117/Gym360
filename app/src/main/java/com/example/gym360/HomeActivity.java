@@ -35,7 +35,7 @@ public class HomeActivity extends AppCompatActivity {
         // Cargar el HomeFragment por defecto al iniciar
         if (savedInstanceState == null) {
             showFragment(new HomeFragment(), "Inicio");
-            navigationView.setCheckedItem(R.id.nav_home); // Asegúrate de tener este id en tu menú XML
+            navigationView.setCheckedItem(R.id.nav_home);
         }
 
         // Manejar los clics del menú
@@ -46,7 +46,7 @@ public class HomeActivity extends AppCompatActivity {
                 showFragment(new HomeFragment(), "Inicio");
             } else if (id == R.id.nav_profile) {
                 showFragment(new ProfileFragment(), "Mi Perfil");
-            } else if (id == R.id.nav_logout) { // Si tienes un botón de logout en el menú
+            } else if (id == R.id.nav_logout) {
                 showLogoutConfirmation();
             }
 
@@ -64,22 +64,18 @@ public class HomeActivity extends AppCompatActivity {
                 .commit();
     }
 
-    private void showLogoutConfirmation() {
+    public void showLogoutConfirmation() {
         new AlertDialog.Builder(this)
                 .setTitle("Cerrar sesión")
                 .setMessage("¿Estás seguro de que deseas cerrar sesión?")
                 .setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss())
                 .setPositiveButton("Cerrar sesión", (dialog, which) -> {
                     FirebaseAuth.getInstance().signOut();
-
-                    SharedPreferences sharedPreferences = getSharedPreferences("Gym360Prefs", MODE_PRIVATE);
-                    sharedPreferences.edit().clear().apply();
-
-                    Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                    // No borrar Gym360Prefs: el usuario decidió recordar credenciales.
+                    Intent intent = new Intent(this, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
-                })
-                .show();
+                }).show();
     }
 }
