@@ -5,14 +5,11 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:background="?android:attr/windowBackground">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="24dp">
-
-        <!-- Avatar del usuario -->
         <ImageView
             android:layout_width="80dp"
             android:layout_height="80dp"
@@ -20,7 +17,6 @@
             android:layout_marginBottom="16dp"
             android:src="@drawable/ic_person"
             app:tint="@color/gym_pink" />
-
         <TextView
             android:id="@+id/tvProfileEmail"
             android:layout_width="wrap_content"
@@ -30,49 +26,36 @@
             android:textColor="@color/text_secondary"
             android:textSize="16sp" />
 
-        <!-- Alerta de Sincronización Pendiente (Requerimiento 9) -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cvSyncAlert"
             style="@style/GymCard.Highlighted"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            app:cardBackgroundColor="#FF9800"
-            android:visibility="gone">
-
+            android:visibility="gone"
+            app:cardBackgroundColor="#FF9800">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="12dp">
-
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginEnd="12dp"
                     android:src="@android:drawable/ic_popup_sync"
                     app:tint="@color/white" />
-
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Tienes datos pendientes por subir a la nube."
+                    android:text="Tienes cambios de perfil pendientes de sincronizar."
                     android:textColor="@color/white"
                     android:textSize="14sp"
                     android:textStyle="bold" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSyncNow"
-                    style="@style/Widget.Material3.Button.TextButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sincronizar"
-                    android:textColor="@color/white" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -81,8 +64,6 @@
             android:textColor="@color/text_primary"
             android:textSize="18sp"
             android:textStyle="bold" />
-
-        <!-- Actualizar Nombre Completo -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilUpdateName"
             style="@style/GymTextInputLayout"
@@ -91,7 +72,6 @@
             android:layout_marginBottom="16dp"
             android:hint="Nombre completo"
             app:startIconDrawable="@drawable/ic_person">
-
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etUpdateName"
                 style="@style/GymTextInputEditText"
@@ -100,8 +80,6 @@
                 android:inputType="textPersonName"
                 android:paddingStart="55dp" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Botón para ir al Fragment de Gestionar Contraseña -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnManagePassword"
             style="@style/GymButton.Secondary"
@@ -109,8 +87,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:text="Gestionar contraseña" />
-
-        <!-- Botón de Guardar Cambios del Nombre -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSaveChanges"
             style="@style/GymButton.Primary"
@@ -119,13 +95,18 @@
             android:layout_marginBottom="16dp"
             android:text="Actualizar Perfil" />
 
-        <!-- Botón de Cerrar Sesión (Se movió la funcionalidad al drawer, pero puedes conservarlo aquí) -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSyncNow"
+            style="@style/GymButton.Secondary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Sincronizar perfil" />
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogout"
             style="@style/GymButton.Secondary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Cerrar Sesión" />
-
     </LinearLayout>
 </ScrollView>

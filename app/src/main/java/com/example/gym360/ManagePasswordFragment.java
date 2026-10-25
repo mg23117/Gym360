@@ -5,83 +5,76 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.gym360.core.auth.AccountSecurityManager;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.EmailAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-//import org.mindrot.jbcrypt.BCrypt;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 
 public class ManagePasswordFragment extends Fragment {
-
     private TextInputEditText etCurrentPassword, etNewPassword, etConfirmNewPassword;
-    private FirebaseAuth mAuth;
-    private FirebaseUser currentUser;
-    private FirebaseFirestore db;
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable @Override
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_manage_password, container, false);
-
         etCurrentPassword = view.findViewById(R.id.etCurrentPassword);
         etNewPassword = view.findViewById(R.id.etNewPassword);
         etConfirmNewPassword = view.findViewById(R.id.etConfirmNewPassword);
-        MaterialButton btnSaveNewPassword = view.findViewById(R.id.btnSaveNewPassword);
+        MaterialButton save = view.findViewById(R.id.btnSaveNewPassword);
+        MaterialButton btnBackToProfile = view.findViewById(R.id.btnBackToProfile);
 
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
-        db = FirebaseFirestore.getInstance();
+        btnBackToProfile.setOnClickListener(v -> {
+            if (getActivity() instanceof HomeActivity) {
+                ((HomeActivity) getActivity()).showFragment(new ProfileFragment(), "Mi Perfil");
+            }
+        });
 
-        btnSaveNewPassword.setOnClickListener(v -> updatePasswordLogic());
-
+        save.setOnClickListener(v -> changePassword(save));
         return view;
     }
 
-    private void updatePasswordLogic() {
-        String currentPass = etCurrentPassword.getText().toString().trim();
-        String newPass = etNewPassword.getText().toString().trim();
-        String confirmPass = etConfirmNewPassword.getText().toString().trim();
-
-        if (currentPass.isEmpty() || newPass.isEmpty() || confirmPass.isEmpty()) {
-            Toast.makeText(getContext(), "Llene todos los campos", Toast.LENGTH_SHORT).show();
+    private void changePassword(MaterialButton save) {
+        String current = etCurrentPassword.getText() == null ? "" : etCurrentPassword.getText().toString();
+        String next = etNewPassword.getText() == null ? "" : etNewPassword.getText().toString();
+        String confirm = etConfirmNewPassword.getText() == null ? "" : etConfirmNewPassword.getText().toString();
+        if (current.isEmpty() || next.isEmpty() || confirm.isEmpty()) {
+            Toast.makeText(requireContext(), "Completa todos los campos", Toast.LENGTH_SHORT).show();
             return;
         }
-
-        if (!newPass.equals(confirmPass)) {
-            Toast.makeText(getContext(), "Las contraseñas nuevas no coinciden", Toast.LENGTH_SHORT).show();
+        if (!next.equals(confirm)) {
+            etConfirmNewPassword.setError("Las contraseñas nuevas no coinciden");
             return;
         }
-
-        if (currentUser != null && currentUser.getEmail() != null) {
-            // 1. Reautenticar al usuario
-            AuthCredential credential = EmailAuthProvider.getCredential(currentUser.getEmail(), currentPass);
-            currentUser.reauthenticate(credential).addOnSuccessListener(aVoid -> {
-
-                // 2. Actualizar en Firebase Auth
-                currentUser.updatePassword(newPass).addOnSuccessListener(aVoid1 -> {
-
-//                    // 3. Encriptar y actualizar en Firestore
-//                    String encryptedPassword = BCrypt.hashpw(newPass, BCrypt.gensalt());
-//                    db.collection("users").document(currentUser.getUid()).update("password", encryptedPassword)
-//                            .addOnSuccessListener(aVoid2 -> {
-//                                Toast.makeText(getContext(), "Contraseña actualizada exitosamente", Toast.LENGTH_SHORT).show();
-//                                // Regresar al Perfil
-//                                if (getActivity() instanceof HomeActivity) {
-//                                    ((HomeActivity) getActivity()).showFragment(new ProfileFragment(), "Mi Perfil");
-//                                }
-//                            });
-                }).addOnFailureListener(e -> Toast.makeText(getContext(), "Error al actualizar clave", Toast.LENGTH_SHORT).show());
-
-            }).addOnFailureListener(e -> etCurrentPassword.setError("Contraseña actual incorrecta"));
-        }
+        save.setEnabled(false);
+        AccountSecurityManager.changePassword(requireContext(), current, next)
+                .addOnCompleteListener(task -> {
+                    if (!isAdded() || getView() == null) return;
+                    save.setEnabled(true);
+                    if (task.isSuccessful()) {
+                        etCurrentPassword.setText("");
+                        etNewPassword.setText("");
+                        etConfirmNewPassword.setText("");
+                        Toast.makeText(requireContext(), "Contraseña actualizada", Toast.LENGTH_LONG).show();
+                        if (requireActivity() instanceof HomeActivity) {
+                            ((HomeActivity) requireActivity()).showFragment(
+                                    new ProfileFragment(), "Mi Perfil");
+                        }
+                        return;
+                    }
+                    Exception error = task.getException();
+                    if (error instanceof FirebaseAuthInvalidCredentialsException) {
+                        etCurrentPassword.setError("Contraseña actual incorrecta");
+                    } else if (error instanceof IllegalArgumentException) {
+                        Toast.makeText(requireContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(requireContext(),
+                                "No fue posible cambiar la contraseña. Revisa la conexión.",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 }
