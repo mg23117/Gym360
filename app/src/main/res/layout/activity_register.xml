@@ -127,7 +127,7 @@
         <!-- Botón de Registrarse -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRegister"
-            style="@style/GymButton.Primary"
+            style="@style/GymButton.Primary.Large"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"

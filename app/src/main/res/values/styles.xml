@@ -5,16 +5,24 @@
     <!-- BOTONES -->
     <!-- ========================================== -->
 
-    <!-- Botón Principal (Rosa para día y noche, ej: Iniciar Sesión, Adquirir Plan) -->
+    <!-- Botón Principal (Rosa para día y noche, ej: Confirmar en los modales) -->
     <style name="GymButton.Primary" parent="Widget.Material3.Button">
         <item name="android:background">@drawable/bg_button_gradient_border</item>
-        <item name="backgroundTint">@null</item> <!-- Obligatorio para que se vea el drawable -->
+        <item name="backgroundTint">@null</item>
         <item name="android:textColor">@color/white</item>
         <item name="cornerRadius">12dp</item>
-        <item name="android:paddingVertical">14dp</item>
+
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+
+        <item name="android:paddingHorizontal">12dp</item>
+        <item name="android:paddingVertical">8dp</item>
+
         <item name="android:fontFamily">@font/main_font</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">17sp</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <!-- Botón Secundario (Gris/Transparente, ej: Cancelar en los modales) -->
@@ -22,8 +30,36 @@
         <item name="strokeColor">#BDBDBD</item>
         <item name="android:textColor">@color/text_primary</item>
         <item name="cornerRadius">12dp</item>
+
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+
+        <item name="android:paddingHorizontal">12dp</item>
+        <item name="android:paddingVertical">9dp</item>
+
         <item name="android:fontFamily">@font/main_font</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <!-- Botón Principal Grande (Login, Registro, etc.) -->
+    <style name="GymButton.Primary.Large" parent="GymButton.Primary">
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:paddingHorizontal">24dp</item>
+        <item name="android:paddingVertical">16dp</item>
+        <item name="android:textSize">17sp</item>
+    </style>
+
+    <!-- Botón Secundario Grande (Google, otras acciones) -->
+    <style name="GymButton.Secondary.Large" parent="GymButton.Secondary">
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:paddingHorizontal">24dp</item>
+        <item name="android:paddingVertical">16dp</item>
+        <item name="android:textSize">17sp</item>
     </style>
 
     <!-- Botón Flotante de Acción (FAB Amarillo con icono oscuro, ej: Agregar Producto) -->

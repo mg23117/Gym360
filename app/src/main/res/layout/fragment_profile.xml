@@ -82,14 +82,14 @@
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnManagePassword"
-            style="@style/GymButton.Secondary"
+            style="@style/GymButton.Secondary.Large"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:text="Gestionar contraseña" />
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSaveChanges"
-            style="@style/GymButton.Primary"
+            style="@style/GymButton.Primary.Large"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -97,14 +97,14 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSyncNow"
-            style="@style/GymButton.Secondary"
+            style="@style/GymButton.Secondary.Large"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:text="Sincronizar perfil" />
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogout"
-            style="@style/GymButton.Secondary"
+            style="@style/GymButton.Secondary.Large"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Cerrar Sesión" />
