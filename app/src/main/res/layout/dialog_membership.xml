@@ -24,7 +24,30 @@
                 android:maxLength="100" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <RadioGroup
+            android:id="@+id/rgDurationUnit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp">
+
+            <RadioButton
+                android:id="@+id/rbDurationMonths"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Meses" />
+
+            <RadioButton
+                android:id="@+id/rbDurationDays"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="Días" />
+        </RadioGroup>
+
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilMembershipDuration"
             style="@style/GymTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

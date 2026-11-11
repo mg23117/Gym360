@@ -7,6 +7,7 @@ public class MembershipDto {
     private String id;
     private String name;
     private int durationMonths;
+    private int durationDays;
     private double price;
     private List<String> benefits;
 
@@ -20,6 +21,8 @@ public class MembershipDto {
     public void setName(String name) { this.name = name; }
     public int getDurationMonths() { return durationMonths; }
     public void setDurationMonths(int durationMonths) { this.durationMonths = durationMonths; }
+    public int getDurationDays() { return durationDays; }
+    public void setDurationDays(int durationDays) { this.durationDays = durationDays; }
     public double getPrice() { return price; }
     public void setPrice(double price) { this.price = price; }
     public List<String> getBenefits() { return benefits; }

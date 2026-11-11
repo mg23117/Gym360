@@ -15,7 +15,7 @@ import com.example.gym360.data.local.dao.UserDao;
 import com.example.gym360.data.local.entity.MembershipEntity;
 import com.example.gym360.data.local.entity.UserEntity;
 
-@Database(entities = {MembershipEntity.class, UserEntity.class}, version = 4, exportSchema = true)
+@Database(entities = {MembershipEntity.class, UserEntity.class}, version = 5, exportSchema = true)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
     private static volatile AppDatabase instance;
@@ -47,6 +47,13 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     };
 
+    public static final Migration MIGRATION_4_5 = new Migration(4, 5) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase db) {
+            db.execSQL("ALTER TABLE memberships ADD COLUMN durationDays INTEGER NOT NULL DEFAULT 0");
+        }
+    };
+
     public static AppDatabase getInstance(Context context) {
         if (instance == null) {
             synchronized (AppDatabase.class) {
@@ -55,7 +62,8 @@ public abstract class AppDatabase extends RoomDatabase {
                             context.getApplicationContext(),
                             AppDatabase.class,
                             "gym360_database"
-                    ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4).build();
+                    ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
+                            .build();
                 }
             }
         }

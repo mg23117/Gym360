@@ -2,10 +2,12 @@ package com.example.gym360.data.local.entity;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(tableName = "memberships")
@@ -23,6 +25,9 @@ public class MembershipEntity {
 
     private int durationMonths;
 
+    @ColumnInfo(defaultValue = "0")
+    private int durationDays;
+
     private double price;
 
     @NonNull
@@ -34,12 +39,21 @@ public class MembershipEntity {
     @ColumnInfo(defaultValue = "0")
     private long localRevision;
 
-    public MembershipEntity(@NonNull String id, @NonNull String name, int durationMonths, double price, @NonNull List<String> benefits, String syncStatus, long localRevision) {
+    // Para evitar romper formularios anteriores.
+    @Ignore
+    public MembershipEntity(@NonNull String id, @NonNull String name, int durationMonths,
+                            double price, @NonNull List<String> benefits, @NonNull String syncStatus,
+                            long localRevision) {
+        this(id, name, durationMonths, 0, price, benefits, syncStatus, localRevision);
+    }
+
+    public MembershipEntity(@NonNull String id, @NonNull String name, int durationMonths, int durationDays, double price, @NonNull List<String> benefits, @NonNull String syncStatus, long localRevision) {
         this.id = id;
         this.name = name;
         this.durationMonths = durationMonths;
+        this.durationDays = durationDays;
         this.price = price;
-        this.benefits = benefits;
+        this.benefits = new ArrayList<>(benefits);
         this.syncStatus = syncStatus;
         this.localRevision = localRevision;
     }
@@ -54,6 +68,8 @@ public class MembershipEntity {
     public int getDurationMonths() { return durationMonths; }
 
     public void setDurationMonths(int durationMonths) { this.durationMonths = durationMonths; }
+    public int getDurationDays() { return durationDays; }
+    public void setDurationDays(int durationDays) { this.durationDays = durationDays; }
 
     public double getPrice() { return price; }
 

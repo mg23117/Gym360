@@ -15,6 +15,7 @@ public class MembershipMapper {
                 entity.getId(),
                 entity.getName(),
                 entity.getDurationMonths(),
+                entity.getDurationDays(),
                 entity.getPrice(),
                 new ArrayList<>(entity.getBenefits())
         );
@@ -24,7 +25,7 @@ public class MembershipMapper {
         if (domain == null) return null;
         List<String> benefits = domain.getBenefits() == null
                 ? Collections.emptyList() : domain.getBenefits();
-        return new MembershipEntity(domain.getId(), domain.getName(), domain.getDurationMonths(),
+        return new MembershipEntity(domain.getId(), domain.getName(), domain.getDurationMonths(), domain.getDurationDays(),
                 domain.getPrice(), benefits, status, 1);
     }
 
@@ -33,6 +34,7 @@ public class MembershipMapper {
         dto.setId(entity.getId());
         dto.setName(entity.getName());
         dto.setDurationMonths(entity.getDurationMonths());
+        dto.setDurationDays(entity.getDurationDays());
         dto.setPrice(entity.getPrice());
         dto.setBenefits(new ArrayList<>(entity.getBenefits()));
         return dto;
@@ -41,13 +43,17 @@ public class MembershipMapper {
     public static MembershipEntity fromDto(MembershipDto dto) {
         if (dto.getId() == null || dto.getId().trim().isEmpty() ||
                 dto.getName() == null || dto.getName().trim().isEmpty() ||
-                dto.getDurationMonths() <= 0 || !Double.isFinite(dto.getPrice()) ||
-                dto.getPrice() < 0) {
+                !validDuration(dto.getDurationMonths(), dto.getDurationDays()) ||
+                !Double.isFinite(dto.getPrice()) || dto.getPrice() < 0) {
             throw new IllegalArgumentException("Plan inválido recibido de Firestore");
         }
-        return new MembershipEntity(dto.getId(), dto.getName(), dto.getDurationMonths(),
+        return new MembershipEntity(dto.getId(), dto.getName(), dto.getDurationMonths(), dto.getDurationDays(),
                 dto.getPrice(), dto.getBenefits() == null ? Collections.emptyList() : dto.getBenefits(),
                 MembershipEntity.SYNCED, 0);
+    }
+
+    public static boolean validDuration(int months, int days) {
+        return (months > 0 && days == 0) || (months == 0 && (days == 1 || days == 15));
     }
 
 }

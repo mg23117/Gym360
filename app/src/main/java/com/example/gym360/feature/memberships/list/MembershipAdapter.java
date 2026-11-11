@@ -30,6 +30,7 @@ public class MembershipAdapter extends ListAdapter<Membership, MembershipAdapter
         @Override public boolean areContentsTheSame(@NonNull Membership a, @NonNull Membership b) {
             return Objects.equals(a.getName(), b.getName()) && a.getPrice() == b.getPrice()
                     && a.getDurationMonths() == b.getDurationMonths()
+                    && a.getDurationDays() == b.getDurationDays()
                     && Objects.equals(a.getBenefits(), b.getBenefits());
         }
     };
@@ -45,7 +46,7 @@ public class MembershipAdapter extends ListAdapter<Membership, MembershipAdapter
         Membership m = getItem(position);
         h.name.setText(m.getName());
         h.price.setText(String.format(Locale.US, "$%.2f", m.getPrice()));
-        h.duration.setText(m.getDurationMonths() == 1 ? "1 mes" : m.getDurationMonths() + " meses");
+        h.duration.setText(m.getDurationLabel());
         int n = m.getBenefits() == null ? 0 : m.getBenefits().size();
         h.benefits.setText(n == 1 ? "1 beneficio" : n + " beneficios");
         h.edit.setOnClickListener(v -> listener.onEdit(m));

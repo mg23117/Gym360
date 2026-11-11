@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "95e850756da63d1f02b44978593c502a",
+    "identityHash": "972fb4cfc9cbcaf9700de67622b9f218",
     "entities": [
       {
         "tableName": "memberships",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `durationMonths` INTEGER NOT NULL, `price` REAL NOT NULL, `benefits` TEXT NOT NULL, `syncStatus` TEXT, `localRevision` INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `durationMonths` INTEGER NOT NULL, `durationDays` INTEGER NOT NULL DEFAULT 0, `price` REAL NOT NULL, `benefits` TEXT NOT NULL, `syncStatus` TEXT, `localRevision` INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -25,6 +25,13 @@
             "columnName": "durationMonths",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "durationDays",
+            "columnName": "durationDays",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
           },
           {
             "fieldPath": "price",
@@ -98,7 +105,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '95e850756da63d1f02b44978593c502a')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '972fb4cfc9cbcaf9700de67622b9f218')"
     ]
   }
 }
