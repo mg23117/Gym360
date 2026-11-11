@@ -24,7 +24,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/** Repositorio LOCAL-ONLY: nunca marca SYNCED ni simula escrituras remotas. */
+// Como room es la fuente loca, todas las escrituras primero son locales
 public class MembershipRepositoryImpl implements MembershipRepository {
     private static final ExecutorService IO = Executors.newSingleThreadExecutor();
     private static final Handler MAIN = new Handler(Looper.getMainLooper());
@@ -65,7 +65,7 @@ public class MembershipRepositoryImpl implements MembershipRepository {
                 String id = membership.getId();
                 if (id == null || id.trim().isEmpty()) id = UUID.randomUUID().toString();
                 MembershipEntity entity = new MembershipEntity(id, membership.getName().trim(),
-                        membership.getDurationMonths(), membership.getPrice(),
+                        membership.getDurationMonths(), membership.getDurationDays(), membership.getPrice(),
                         safeBenefits(membership.getBenefits()), MembershipEntity.PENDING_UPSERT, 1);
                 dao.insert(entity);
                 scheduleSyncSafely();
@@ -90,7 +90,7 @@ public class MembershipRepositoryImpl implements MembershipRepository {
                 }
                 MembershipEntity updated = new MembershipEntity(membership.getId(),
                         membership.getName().trim(), membership.getDurationMonths(),
-                        membership.getPrice(), safeBenefits(membership.getBenefits()),
+                        membership.getDurationDays(), membership.getPrice(), safeBenefits(membership.getBenefits()),
                         MembershipEntity.PENDING_UPSERT, previous.getLocalRevision() + 1);
                 if (dao.update(updated) == 0) throw new IllegalStateException("No se pudo actualizar");
                 scheduleSyncSafely();
@@ -149,31 +149,17 @@ public class MembershipRepositoryImpl implements MembershipRepository {
     }
 
     private void scheduleSyncSafely() {
-
         // La operación local ya fue guardada en Room.
         // No intentar sincronizar sin sesión Firebase.
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-
-            Log.d(
-                    "Gym360MembershipSync",
-                    "Sin sesión Firebase. " +
-                            "Los cambios quedan pendientes en Room."
-            );
-
+            Log.d("Gym360MembershipSync", "Sin sesión Firebase. " + "Los cambios quedan pendientes en Room.");
             return;
         }
 
         try {
-
             MembershipSyncScheduler.enqueue(context);
-
         } catch (RuntimeException exception) {
-
-            Log.e(
-                    "Gym360MembershipSync",
-                    "No se pudo programar la sincronización",
-                    exception
-            );
+            Log.e("Gym360MembershipSync", "No se pudo programar la sincronización", exception);
         }
     }
 
@@ -182,11 +168,15 @@ public class MembershipRepositoryImpl implements MembershipRepository {
         if (model.getName() == null || model.getName().trim().isEmpty()) {
             throw new IllegalArgumentException("Ingresa el nombre de la membresía");
         }
-        if (model.getDurationMonths() <= 0) {
-            throw new IllegalArgumentException("La duración debe ser mayor que cero");
+        if (!MembershipMapper.validDuration(model.getDurationMonths(), model.getDurationDays())) {
+            throw new IllegalArgumentException("Utiliza meses positivos o exactamente 1/15 días");
         }
-        if (!Double.isFinite(model.getPrice()) || model.getPrice() < 0) {
-            throw new IllegalArgumentException("El precio debe ser un número válido no negativo");
+        if (!Double.isFinite(model.getPrice()) || model.getPrice() < 0 || model.getPrice() > 500000) {
+            throw new IllegalArgumentException("El precio debe estar entre $0 y $500000");
+        }
+        double cents = model.getPrice() * 100.0;
+        if (Math.abs(cents - Math.rint(cents)) > 0.000001) {
+            throw new IllegalArgumentException("El precio admite como máximo dos decimales");
         }
     }
 

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -21,6 +22,8 @@ import com.example.gym360.domain.model.Membership;
 import com.example.gym360.domain.repository.MembershipRepository;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,12 +91,23 @@ public class MembershipListFragment extends Fragment {
         View form = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_membership, null);
         EditText name = form.findViewById(R.id.etMembershipName);
         EditText duration = form.findViewById(R.id.etMembershipDuration);
+        RadioGroup durationUnit = form.findViewById(R.id.rgDurationUnit);
+        TextInputLayout durationLayout = form.findViewById(R.id.tilMembershipDuration);
+        durationUnit.setOnCheckedChangeListener((group, checkedId) ->
+                durationLayout.setHint(checkedId == R.id.rbDurationDays
+                        ? "Duración en días (1 o 15)" : "Duración en meses"));
         EditText price = form.findViewById(R.id.etMembershipPrice);
         EditText benefits = form.findViewById(R.id.etMembershipBenefits);
 
         if (editing) {
             name.setText(existing.getName());
-            duration.setText(String.valueOf(existing.getDurationMonths()));
+            if (existing.getDurationDays() > 0) {
+                durationUnit.check(R.id.rbDurationDays);
+                duration.setText(String.valueOf(existing.getDurationDays()));
+            } else {
+                durationUnit.check(R.id.rbDurationMonths);
+                duration.setText(String.valueOf(existing.getDurationMonths()));
+            }
             price.setText(String.valueOf(existing.getPrice()));
             benefits.setText(existing.getBenefits() == null ? "" :
                     TextUtils.join(", ", existing.getBenefits()));
@@ -109,27 +123,38 @@ public class MembershipListFragment extends Fragment {
                 .setOnClickListener(v -> {
                     String title = name.getText().toString().trim();
                     if (title.isEmpty()) { name.setError("El nombre es obligatorio"); return; }
-                    int months;
+                    int months = 0;
+                    int days = 0;
                     double amount;
                     try {
-                        months = Integer.parseInt(duration.getText().toString().trim());
-                        if (months <= 0) throw new NumberFormatException();
+                        int value = Integer.parseInt(duration.getText().toString().trim());
+                        if (durationUnit.getCheckedRadioButtonId() == R.id.rbDurationDays) {
+                            if (value != 1 && value != 15) throw new NumberFormatException();
+                            days = value;
+                        } else {
+                            if (value <= 0) throw new NumberFormatException();
+                            months = value;
+                        }
                     } catch (NumberFormatException e) {
-                        duration.setError("Ingresa un número de meses mayor que 0"); return;
+                        duration.setError("En días: 1 o 15. En meses: entero mayor que 0"); return;
                     }
                     try {
                         amount = Double.parseDouble(price.getText().toString().trim().replace(',', '.'));
-                        if (!Double.isFinite(amount) || amount < 0) throw new NumberFormatException();
+                        if (!Double.isFinite(amount) || amount < 0 || amount > 500000 ||
+                                Math.abs(amount * 100 - Math.rint(amount * 100)) > 0.000001) {
+                            throw new NumberFormatException();
+                        }
                     } catch (NumberFormatException e) {
-                        price.setError("Ingresa un precio válido"); return;
+                        price.setError("Precio válido en USD con máximo 2 decimales"); return;
                     }
+
                     List<String> benefitList = new ArrayList<>();
                     for (String part : benefits.getText().toString().split(",")) {
                         String cleaned = part.trim();
                         if (!cleaned.isEmpty()) benefitList.add(cleaned);
                     }
                     Membership candidate = new Membership(editing ? existing.getId() : "",
-                            title, months, amount, benefitList);
+                            title, months, days, amount, benefitList);
                     MembershipRepository.Callback cb = new MembershipRepository.Callback() {
                         @Override public void onSuccess() {
                             if (!isAdded()) return;
@@ -148,7 +173,7 @@ public class MembershipListFragment extends Fragment {
                     if (editing) viewModel.update(candidate, cb);
                     else viewModel.create(candidate, cb);
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-                    // Evita guardar dos veces mientras Room procesa la operación.
+                    // Para evitar guardar dos veces mientras Room procesa la operación.
                 }));
         dialog.show();
     }
