@@ -1,29 +1,23 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function owner(uid) { return signedIn() && request.auth.uid == uid; }
     function isAdmin() {
-      return request.auth != null
+      return signedIn()
         && exists(/databases/$(database)/documents/admin_users/$(request.auth.uid));
     }
-
     match /admin_users/{uid} {
-      allow get: if request.auth != null && request.auth.uid == uid;
+      allow get: if owner(uid);
       allow list, create, update, delete: if false;
     }
-
-    // Perfiles de usuarios: cada cliente puede crear y leer solo su perfil.
     match /users/{uid} {
-      allow get: if request.auth != null && request.auth.uid == uid;
-      allow list, update, delete: if false;
-      allow create: if request.auth != null
-        && request.auth.uid == uid
-        && request.resource.data.keys().hasAll([
-          'uid', 'fullName', 'email', 'createdAt'
-        ])
-        && request.resource.data.keys().hasOnly([
-          'uid', 'fullName', 'email', 'createdAt'
-        ])
+      allow get: if owner(uid) || isAdmin();
+      allow list: if isAdmin();
+      allow delete: if false;
+      allow create: if owner(uid)
+        && request.resource.data.keys().hasAll(['uid', 'fullName', 'email', 'createdAt'])
+        && request.resource.data.keys().hasOnly(['uid', 'fullName', 'email', 'createdAt'])
         && request.resource.data.uid == uid
         && request.resource.data.uid is string
         && request.resource.data.fullName is string
@@ -32,27 +26,65 @@ service cloud.firestore {
         && request.resource.data.email is string
         && request.resource.data.email == request.auth.token.email
         && request.resource.data.createdAt == request.time;
+      allow update: if owner(uid)
+        && request.resource.data.keys().hasAll(['uid', 'fullName', 'email', 'createdAt'])
+        && request.resource.data.keys().hasOnly(['uid', 'fullName', 'email', 'createdAt'])
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['fullName'])
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.email == resource.data.email
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.fullName is string
+        && request.resource.data.fullName.size() >= 7
+        && request.resource.data.fullName.size() <= 120;
+      match /membership_purchases/{purchaseId} {
+        allow read: if owner(uid) || isAdmin();
+        allow create, update, delete: if false;
+      }
     }
-
     match /memberships/{membershipId} {
-      allow read: if isAdmin();
+      // Para que el cliente pueda consultar el catálogo.
+      allow read: if signedIn();
       allow create, update: if isAdmin()
         && request.resource.data.keys().hasAll([
           'id', 'name', 'durationMonths', 'price', 'benefits'
         ])
         && request.resource.data.keys().hasOnly([
-          'id', 'name', 'durationMonths', 'price', 'benefits'
+          'id', 'name', 'durationMonths', 'durationDays', 'price', 'benefits'
         ])
         && request.resource.data.id == membershipId
         && request.resource.data.name is string
         && request.resource.data.name.size() > 0
         && request.resource.data.name.size() <= 100
         && request.resource.data.durationMonths is int
-        && request.resource.data.durationMonths > 0
+        && request.resource.data.get('durationDays', 0) is int
+        && (
+          (request.resource.data.durationMonths > 0 &&
+            request.resource.data.durationMonths <= 120 &&
+            request.resource.data.get('durationDays', 0) == 0)
+          ||
+          (request.resource.data.durationMonths == 0 &&
+            request.resource.data.get('durationDays', 0) in [1, 15])
+        )
         && request.resource.data.price is number
         && request.resource.data.price >= 0
+        && request.resource.data.price <= 500000
         && request.resource.data.benefits is list;
       allow delete: if isAdmin();
+    }
+    match /wallets/{uid} {
+      allow get: if owner(uid) || isAdmin();
+      allow list: if isAdmin();
+      // Las operaciones monetarias SOLO se realizan en el backend.
+      allow create, update, delete: if false;
+      match /transactions/{operationId} {
+        allow read: if owner(uid) || isAdmin();
+        allow create, update, delete: if false;
+      }
+    }
+    match /user_memberships/{uid} {
+      allow get: if owner(uid) || isAdmin();
+      allow list: if isAdmin();
+      allow create, update, delete: if false;
     }
   }
 }

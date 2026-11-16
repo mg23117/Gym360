@@ -48,6 +48,8 @@ public class HomeActivity extends AppCompatActivity {
                 showFragment(new ProfileFragment(), "Mi Perfil");
             } else if (id == R.id.nav_logout) {
                 showLogoutConfirmation();
+            } else if (id == R.id.nav_client_memberships) {
+                showFragment(new ClientMembershipsFragment(), "Membresías y saldo");
             }
 
             drawerLayout.closeDrawer(GravityCompat.START);

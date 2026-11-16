@@ -88,6 +88,8 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 drawerLayout.closeDrawer(navigationView);
                 showLogoutConfirmation();
                 return true;
+            } else if (itemId == R.id.nav_clients) {
+                startActivity(new Intent(this, AdminWalletActivity.class));
             } else {
                 return false;
             }
