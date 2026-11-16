@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:orientation="vertical" android:padding="24dp">
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Ajuste de saldo prepago"
+            android:textSize="18sp" android:textStyle="bold" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" android:hint="UID del cliente">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etWalletCustomerUid" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <RadioGroup android:id="@+id/rgWalletAction" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:orientation="horizontal">
+            <RadioButton android:id="@+id/rbWalletCredit" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:text="Recarga" android:checked="true" />
+            <RadioButton android:id="@+id/rbWalletDebit" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_marginStart="16dp" android:text="Descuento" />
+        </RadioGroup>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" android:hint="Monto (USD)">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etWalletAmount" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:inputType="numberDecimal" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" android:hint="Motivo o referencia del pago físico">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etWalletReason" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:inputType="textCapSentences" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnApplyWalletAdjustment" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="16dp"
+            android:text="Registrar operación" />
+        <TextView android:id="@+id/tvWalletAdjustmentResult"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" />
+    </LinearLayout>
+</ScrollView>
