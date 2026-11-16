@@ -1,0 +1,17 @@
+{
+  "name": "gym360-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "API REST para saldo prepago y membresías de Gym360",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test test/*.test.js",
+    "check": "node --check src/server.js && node --check src/accountService.js"
+  },
+  "engines": { "node": ">=22" },
+  "dependencies": {
+    "express": "^5.1.0",
+    "firebase-admin": "^14.5.1"
+  }
+}
