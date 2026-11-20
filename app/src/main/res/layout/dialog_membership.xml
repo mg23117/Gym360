@@ -3,89 +3,109 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:background="@drawable/bg_gym_dialog">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:orientation="vertical">
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/GymTextInputLayout"
+        <TextView android:id="@+id/tvMembershipDialogTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nombre del plan">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etMembershipName"
+            android:padding="17dp"
+            android:gravity="center"
+            android:text="Nueva membresía"
+            android:background="@color/gym_pink"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="21sp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="18dp"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/GymTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textCapSentences"
-                android:maxLength="100" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:hint="Nombre del plan">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etMembershipName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapSentences"
+                    android:maxLength="100" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <RadioGroup
-            android:id="@+id/rgDurationUnit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="12dp">
-
-            <RadioButton
-                android:id="@+id/rbDurationMonths"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="Meses" />
-
-            <RadioButton
-                android:id="@+id/rbDurationDays"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:text="Días" />
-        </RadioGroup>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilMembershipDuration"
-            style="@style/GymTextInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="Duración en meses">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etMembershipDuration"
+            <RadioGroup
+                android:id="@+id/rgDurationUnit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp">
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/GymTextInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="Precio (USD)">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etMembershipPrice"
+                <RadioButton
+                    android:id="@+id/rbDurationMonths"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:buttonTint="@color/gym_pink"
+                    android:text="Meses" />
+
+                <RadioButton
+                    android:id="@+id/rbDurationDays"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:buttonTint="@color/gym_pink"
+                    android:text="Días" />
+            </RadioGroup>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilMembershipDuration"
+                style="@style/GymTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginTop="12dp"
+                android:hint="Duración en meses">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etMembershipDuration"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/GymTextInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            app:helperText="Separa los beneficios con comas"
-            android:hint="Beneficios">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etMembershipBenefits"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/GymTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textMultiLine|textCapSentences"
-                android:minLines="2" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginTop="12dp"
+                android:hint="Precio (USD)">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etMembershipPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/GymTextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:helperText="Separa los beneficios con comas"
+                android:hint="Beneficios">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etMembershipBenefits"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:minLines="2" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>

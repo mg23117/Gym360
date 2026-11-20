@@ -34,7 +34,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tvSuccessMessage"
+            android:id="@+id/tvPurchaseSuccessMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
@@ -44,7 +44,7 @@
             android:textSize="16sp" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAcceptSuccess"
+            android:id="@+id/btnPurchaseSuccessOk"
             style="@style/GymButton.Primary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/app_background" android:fillViewport="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:padding="16dp" android:orientation="vertical">
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Mi billetera" android:textColor="@color/text_primary"
+            android:textSize="23sp" android:textStyle="bold" android:layout_marginBottom="10dp" />
+        <com.google.android.material.card.MaterialCardView android:layout_width="match_parent"
+            android:layout_height="wrap_content" app:cardCornerRadius="18dp"
+            app:cardBackgroundColor="#351227" app:cardElevation="4dp"
+            android:layout_marginBottom="12dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:padding="22dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="SALDO PREPAGO" android:textColor="@android:color/white"
+                    android:textSize="13sp" android:textStyle="bold" />
+                <TextView android:id="@+id/tvWalletPageBalance"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp" android:text="Consultando…"
+                    android:textColor="@color/gym_yellow" android:textSize="34sp"
+                    android:textStyle="bold" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp" android:text="Recarga tu saldo pagando en la recepción del gimnasio."
+                    android:textColor="#E8D5DF" android:textSize="13sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+        <TextView android:id="@+id/tvWalletSyncStatus"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Actualizando información…" android:textSize="12sp"
+            android:textColor="@color/text_secondary" android:padding="10dp"
+            android:layout_marginBottom="18dp" android:background="@drawable/bg_gym_plan_card" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Movimientos de billetera" android:textColor="@color/text_primary"
+            android:textSize="20sp" android:textStyle="bold" android:layout_marginBottom="5dp" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Recargas, ajustes y pagos confirmados. Los pagos de tienda aparecerán cuando se habilite ese módulo."
+            android:textSize="13sp" android:textColor="@color/text_secondary"
+            android:layout_marginBottom="12dp" />
+        <LinearLayout android:id="@+id/llWalletTransactions"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="20dp" android:layout_marginBottom="8dp"
+            android:text="Historial de membresías adquiridas" android:textSize="20sp"
+            android:textStyle="bold" android:textColor="@color/text_primary" />
+        <LinearLayout android:id="@+id/llMembershipPurchases"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </LinearLayout>
+</ScrollView>
