@@ -2,93 +2,75 @@
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/GymCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="16dp">
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="3dp"
+    app:cardBackgroundColor="#F5F1F3">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-        <!-- Fila Superior: Título y Etiqueta de Activa -->
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <View
+            android:layout_width="4dp"
+            android:layout_height="match_parent"
+            android:background="@color/gym_pink" />
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp">
+            android:layout_weight="1"
+            android:padding="15dp"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tvPlanName"
-                android:layout_width="wrap_content"
+                android:id="@+id/tvClientPlanName"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:textColor="@color/text_primary"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <!-- Etiqueta amarilla "Activa" (Oculta por defecto) -->
-            <TextView
-                android:id="@+id/tvActiveBadge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:background="@drawable/bg_admin_badge"
-                android:backgroundTint="@color/gym_yellow"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="4dp"
-                android:text="Activa"
-                android:textColor="@color/black"
+                android:text="Mensual"
+                android:textSize="19sp"
                 android:textStyle="bold"
-                android:visibility="gone" />
-        </RelativeLayout>
-
-        <!-- Lista de Beneficios (Viñetas) -->
-        <TextView
-            android:id="@+id/tvPlanBenefits"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:lineSpacingExtra="4dp"
-            android:textColor="@color/text_primary"
-            android:textSize="14sp" />
-
-        <!-- Fila de Precio y Vencimiento -->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp">
+                android:textColor="@color/gym_pink" />
 
             <TextView
-                android:id="@+id/tvPlanPrice"
-                android:layout_width="wrap_content"
+                android:id="@+id/tvClientPlanDuration"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
+                android:layout_marginTop="2dp"
+                android:text="1 mes"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tvClientPlanBenefits"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="• Beneficio"
                 android:textColor="@color/text_primary"
-                android:textSize="18sp"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvClientPlanPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="$15.00"
+                android:textColor="@color/gym_pink"
+                android:textSize="19sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tvPlanExpiry"
-                android:layout_width="wrap_content"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnBuyClientPlan"
+                style="@style/GymButton.Primary"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:textColor="@color/text_secondary"
-                android:textSize="12sp"
-                android:visibility="gone" />
-        </RelativeLayout>
+                android:layout_marginTop="8dp"
+                android:text="Adquirir plan" />
 
-        <!-- Botón de Adquirir -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAcquirePlan"
-            style="@style/GymButton.Primary"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Adquirir Plan" />
-
+        </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

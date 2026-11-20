@@ -3,6 +3,8 @@ package com.example.gym360;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
@@ -41,17 +43,16 @@ public class HomeActivity extends AppCompatActivity {
         // Manejar los clics del menú
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
-
-            if (id == R.id.nav_home) {
-                showFragment(new HomeFragment(), "Inicio");
-            } else if (id == R.id.nav_profile) {
-                showFragment(new ProfileFragment(), "Mi Perfil");
-            } else if (id == R.id.nav_logout) {
-                showLogoutConfirmation();
-            } else if (id == R.id.nav_client_memberships) {
-                showFragment(new ClientMembershipsFragment(), "Membresías y saldo");
+            if (id == R.id.nav_home) showFragment(new HomeFragment(), "Inicio");
+            else if (id == R.id.nav_memberships) openMemberships();
+            else if (id == R.id.nav_wallet) openWallet();
+            else if (id == R.id.nav_profile) showFragment(new ProfileFragment(), "Mi Perfil");
+            else if (id == R.id.nav_logout) showLogoutConfirmation();
+            else {
+                Toast.makeText(this, "Este módulo se habilitará próximamente", Toast.LENGTH_SHORT).show();
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return false;
             }
-
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         });
@@ -79,5 +80,15 @@ public class HomeActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }).show();
+    }
+
+    public void openMemberships() {
+        navigationView.setCheckedItem(R.id.nav_memberships);
+        showFragment(new ClientMembershipsFragment(), "Membresías");
+    }
+
+    public void openWallet() {
+        navigationView.setCheckedItem(R.id.nav_wallet);
+        showFragment(new ClientWalletFragment(), "Mi billetera");
     }
 }

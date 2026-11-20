@@ -28,7 +28,7 @@ import java.util.concurrent.Executors;
 
 /** Este va a ser el cliente HTTPS autenticado para el backend */
 public class AccountApiClient {
-    private static final String BASE_URL = "";
+    private static final String BASE_URL = "https://gym360-8rj7.onrender.com";
 
     private static final Handler MAIN = new Handler(Looper.getMainLooper());
     private static final ExecutorService IO = Executors.newFixedThreadPool(2);

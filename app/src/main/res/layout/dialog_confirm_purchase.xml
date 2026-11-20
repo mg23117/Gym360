@@ -33,12 +33,12 @@
             android:padding="24dp">
 
             <TextView
-                android:id="@+id/tvConfirmMessage"
+                android:id="@+id/tvPurchaseDialogMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 android:gravity="center"
-                android:text="Tu saldo es de $30.00, ¿estás seguro que quieres comprar esta membresía por $10.00? El total se descontará de tu saldo."
+                android:text="¿Estás seguro de realizar esta compra? El saldo será descontado automaticamente de tu billetera."
                 android:textColor="@color/text_primary"
                 android:textSize="19sp" />
 
@@ -49,7 +49,7 @@
                 android:gravity="center">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnConfirmPurchase"
+                    android:id="@+id/btnConfirmPlanPurchase"
                     style="@style/GymButton.Primary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
                     app:iconSize="24dp" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnCancelPurchase"
+                    android:id="@+id/btnCancelPlanPurchase"
                     style="@style/GymButton.Secondary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
