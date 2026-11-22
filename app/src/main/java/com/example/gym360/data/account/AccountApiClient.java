@@ -141,4 +141,8 @@ public class AccountApiClient {
         }
         return builder.toString();
     }
+
+    public static String baseUrl() {
+        return BASE_URL.replaceAll("/+$", "");
+    }
 }
