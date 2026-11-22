@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import com.example.gym360.data.account.ClientAccountRepository;
+import com.example.gym360.data.repository.ClientAccountRepository;
 import com.example.gym360.data.local.entity.MembershipPurchaseEntity;
 import com.example.gym360.data.sync.ClientAccountAutoSync;
 import com.google.firebase.auth.FirebaseAuth;

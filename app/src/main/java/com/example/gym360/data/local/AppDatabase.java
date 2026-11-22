@@ -12,11 +12,14 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.gym360.data.local.dao.MembershipDao;
 import com.example.gym360.data.local.dao.MembershipPurchaseDao;
+import com.example.gym360.data.local.dao.StoreDao;
 import com.example.gym360.data.local.dao.UserDao;
 import com.example.gym360.data.local.dao.UserMembershipSummaryDao;
 import com.example.gym360.data.local.dao.WalletSnapshotDao;
 import com.example.gym360.data.local.entity.MembershipEntity;
 import com.example.gym360.data.local.entity.MembershipPurchaseEntity;
+import com.example.gym360.data.local.entity.StoreCartItemEntity;
+import com.example.gym360.data.local.entity.StoreProductEntity;
 import com.example.gym360.data.local.entity.UserEntity;
 import com.example.gym360.data.local.entity.UserMembershipSummaryEntity;
 import com.example.gym360.data.local.entity.WalletSnapshotEntity;
@@ -26,14 +29,17 @@ import com.example.gym360.data.local.entity.WalletSnapshotEntity;
         UserEntity.class,
         WalletSnapshotEntity.class,
         UserMembershipSummaryEntity.class,
-        MembershipPurchaseEntity.class
-}, version = 6, exportSchema = true)
+        MembershipPurchaseEntity.class,
+        StoreProductEntity.class,
+        StoreCartItemEntity.class
+}, version = 7, exportSchema = true)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
     private static volatile AppDatabase instance;
 
     public abstract MembershipDao membershipDao();
     public abstract UserDao userDao();
+    public abstract StoreDao storeDao();
     public abstract WalletSnapshotDao walletSnapshotDao();
     public abstract UserMembershipSummaryDao userMembershipSummaryDao();
     public abstract MembershipPurchaseDao membershipPurchaseDao();
@@ -90,6 +96,24 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     };
 
+    public static final Migration MIGRATION_6_7 = new Migration(6, 7) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase db) {
+            db.execSQL("CREATE TABLE IF NOT EXISTS `store_products` (" +
+                    "`id` TEXT NOT NULL, `name` TEXT NOT NULL, `category` TEXT NOT NULL," +
+                    "`description` TEXT NOT NULL, `priceCents` INTEGER NOT NULL," +
+                    "`stock` INTEGER NOT NULL, `imagesJson` TEXT NOT NULL," +
+                    "`isActive` INTEGER NOT NULL, `cachedAtMillis` INTEGER NOT NULL," +
+                    "PRIMARY KEY(`id`))");
+            db.execSQL("CREATE TABLE IF NOT EXISTS `store_cart_items` (" +
+                    "`id` TEXT NOT NULL, `uid` TEXT NOT NULL," +
+                    "`productId` TEXT NOT NULL, `quantity` INTEGER NOT NULL," +
+                    "PRIMARY KEY(`id`))");
+            db.execSQL("CREATE INDEX IF NOT EXISTS `index_store_cart_items_uid` " +
+                    "ON `store_cart_items` (`uid`)");
+        }
+    };
+
     public static AppDatabase getInstance(Context context) {
         if (instance == null) {
             synchronized (AppDatabase.class) {
@@ -98,7 +122,12 @@ public abstract class AppDatabase extends RoomDatabase {
                             context.getApplicationContext(),
                             AppDatabase.class,
                             "gym360_database"
-                    ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
+                    ).addMigrations(MIGRATION_1_2,
+                                    MIGRATION_2_3,
+                                    MIGRATION_3_4,
+                                    MIGRATION_4_5,
+                                    MIGRATION_5_6,
+                                    MIGRATION_6_7)
                             .build();
                 }
             }

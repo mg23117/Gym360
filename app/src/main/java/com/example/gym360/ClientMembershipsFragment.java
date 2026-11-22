@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import com.example.gym360.data.account.ClientAccountRepository;
+import com.example.gym360.data.repository.ClientAccountRepository;
 import com.example.gym360.data.mapper.MembershipMapper;
 import com.example.gym360.data.model.MembershipDto;
 import com.example.gym360.data.sync.ClientAccountAutoSync;
@@ -25,7 +25,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.MetadataChanges;
-import com.google.firebase.firestore.Source;
 
 import java.util.ArrayList;
 import java.util.List;

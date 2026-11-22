@@ -3,7 +3,7 @@ package com.example.gym360.data.sync;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.gym360.data.account.ClientAccountRepository;
+import com.example.gym360.data.repository.ClientAccountRepository;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
